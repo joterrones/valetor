@@ -35,7 +35,7 @@ app.use('/archivos', express.static(__dirname + ruta));
 app.use('/icons', express.static(__dirname + icon));
 
 /* Movil */
-app.post('/api/movil/getusuario', dbMovil.getusuario);
+app.post('/api/movil/getusuario', dbMovil.getusuario,);
 app.get('/api/movil/getdato', dbMovil.getdato);
 
 server.listen(port, function () {

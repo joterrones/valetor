@@ -8,9 +8,17 @@ const ruta = '/archivos';
 
 
 const getusuario = async (request, response) => {
-    let queryUsuario = await pool.query('select * from seg_userprofile where c_usuario = $1 and c_clave= $2 and n_borrado = 0', [response.body.c_usuario, response.body.c_clave]);
+    
+    try {
+        let scriptSQL = "select * from seg_usuario where c_usuario = '"+request.body.c_usuario+"' and c_clave= '"+request.body.c_clave+"' and n_borrado = 0";
+        console.log(scriptSQL)
+        let queryUsuario = await pool.query(scriptSQL);
 
-    response.status(200).json(queryUsuario.rows);
+        response.status(200).json(queryUsuario.rows);
+    } catch (error) {
+        response.status(200).json("error en la query");
+    }
+
 }
 
 const getdato = async (request, response) => {
