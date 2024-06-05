@@ -21,7 +21,7 @@ const getusuario = async (request, response) => {
                 });
         }else{
             response.status(200).json({
-                data:[],
+                data:null,
                     flag: false,
                     mensaje: "Usuario y/o clave incorrecto"
                 });
@@ -29,7 +29,7 @@ const getusuario = async (request, response) => {
      
     } catch (error) {
         response.status(200).json({
-            data:[],
+            data:null,
                 flag: false,
                 mensaje: "Resultado con error"
             });
