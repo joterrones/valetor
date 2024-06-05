@@ -13,10 +13,26 @@ const getusuario = async (request, response) => {
         let scriptSQL = "select n_idseg_usuario,c_usuario,c_clave,c_nombre from seg_usuario where c_usuario = '"+request.body.c_usuario+"' and c_clave= '"+request.body.c_clave+"' and n_borrado = 0";
         console.log(scriptSQL)
         let queryUsuario = await pool.query(scriptSQL);
-
-        response.status(200).json(queryUsuario.rows);
+        if(queryUsuario.rowCount>0){
+            response.status(200).json({
+                    data:queryUsuario.rows,
+                    flag: true,
+                    mensaje: "Resultado correcto"
+                });
+        }else{
+            response.status(200).json({
+                    data:null,
+                    flag: fale,
+                    mensaje: "Resultado incorrecto"
+                });
+        }
+     
     } catch (error) {
-        response.status(200).json("error en la query");
+        response.status(200).json({
+                data:null,
+                flag: fale,
+                mensaje: "Resultado incorrecto"
+            });
     }
 
 }
