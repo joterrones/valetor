@@ -21,17 +21,17 @@ const getusuario = async (request, response) => {
                 });
         }else{
             response.status(200).json({
-                    data:null,
-                    flag: fale,
-                    mensaje: "Resultado incorrecto"
+                data:[],
+                    flag: false,
+                    mensaje: "Usuario y/o clave incorrecto"
                 });
         }
      
     } catch (error) {
         response.status(200).json({
-                data:null,
-                flag: fale,
-                mensaje: "Resultado incorrecto"
+            data:[],
+                flag: false,
+                mensaje: "Resultado con error"
             });
     }
 
