@@ -10,7 +10,7 @@ const ruta = '/archivos';
 const getusuario = async (request, response) => {
     
     try {
-        let scriptSQL = "select * from seg_usuario where c_usuario = '"+request.body.c_usuario+"' and c_clave= '"+request.body.c_clave+"' and n_borrado = 0";
+        let scriptSQL = "select n_idseg_usuario,c_usuario,c_clave,c_nombre from seg_usuario where c_usuario = '"+request.body.c_usuario+"' and c_clave= '"+request.body.c_clave+"' and n_borrado = 0";
         console.log(scriptSQL)
         let queryUsuario = await pool.query(scriptSQL);
 
