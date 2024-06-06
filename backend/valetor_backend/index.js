@@ -35,8 +35,12 @@ app.use('/archivos', express.static(__dirname + ruta));
 app.use('/icons', express.static(__dirname + icon));
 
 /* Movil */
-app.post('/api/movil/getusuario', dbMovil.getusuario,);
-app.get('/api/movil/getdato', dbMovil.getdato);
+app.post('/api/movil/getusuario', dbMovil.getusuario);
+app.get('/api/movil/getequipo', dbMovil.getequipo);
+app.get('/api/movil/gettipoproducto', dbMovil.gettipoproducto);
+app.get('/api/movil/getproducto', dbMovil.getproducto);
+app.get('/api/movil/getventa', dbMovil.getventa);
+app.get('/api/movil/getdetalleventa', dbMovil.getdetalleventa);
 app.post('/api/movil/insertarventa', dbMovil.insertarventa);
 app.post('/api/movil/insertardetalleventa', dbMovil.insertardetalleventa);
 
