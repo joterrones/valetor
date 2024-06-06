@@ -40,7 +40,7 @@ const getusuario = async (request, response) => {
 const insertarventa = async (request, response) => {
     
     try {
-        let scriptSQL = "insert into gen_venta (n_idseg_vendedor, n_idgen_equipo, n_borrado, id_usercrea, d_fechacrea)values("+request.body.n_idseg_vendedor+","+request.body.n_idgen_equipo+",0,"+request.body.id_usercrea+",now()) returning *";
+        let scriptSQL = "insert into gen_venta (n_idseg_vendedor, n_idgen_equipo, n_borrado, n_id_usercrea, d_fechacrea)values("+request.body.n_idseg_vendedor+","+request.body.n_idgen_equipo+",0,"+request.body.n_idseg_vendedor+",now()) returning *";
         console.log(scriptSQL)
         let queryUsuario = await pool.query(scriptSQL);
         if(queryUsuario.rowCount>0){
@@ -61,7 +61,7 @@ const insertarventa = async (request, response) => {
         response.status(200).json({
             data:null,
                 flag: false,
-                mensaje: "Error al registrar la venta"
+                mensaje: "Error al registrar la venta " +error
             });
     }
 
@@ -70,7 +70,7 @@ const insertarventa = async (request, response) => {
 const actualizarhoraventa = async (request, response) => {
     
     try {
-        let scriptSQL = "update gen_venta set n_hora ="+request.body.n_hora+", id_usermodi = "+request.body.n_idseg_vendedor+",d_fechamodi = now()) returning *";
+        let scriptSQL = "update gen_venta set n_hora ="+request.body.n_hora+", n_id_usermodi = "+request.body.n_idseg_vendedor+",d_fechamodi = now()) returning *";
         console.log(scriptSQL)
         let queryUsuario = await pool.query(scriptSQL);
         if(queryUsuario.rowCount>0){
@@ -100,7 +100,7 @@ const actualizarhoraventa = async (request, response) => {
 const actualizarfechaventa = async (request, response) => {
     
     try {
-        let scriptSQL = "update gen_venta set d_fecha ="+request.body.d_fecha+", id_usermodi = "+request.body.n_idseg_vendedor+",d_fechamodi = now()) returning *";
+        let scriptSQL = "update gen_venta set d_fecha ="+request.body.d_fecha+", n_id_usermodi = "+request.body.n_idseg_vendedor+",d_fechamodi = now()) returning *";
         console.log(scriptSQL)
         let queryUsuario = await pool.query(scriptSQL);
         if(queryUsuario.rowCount>0){
@@ -130,7 +130,7 @@ const actualizarfechaventa = async (request, response) => {
 const insertardetalleventa = async (request, response) => {
     
     try {
-        let scriptSQL = "insert into gen_detalle_venta (n_idgen_venta, n_idgen_producto, n_cantidad, n_subtotal, b_pagado,  n_borrado, id_usercrea, d_fechacrea)values("+request.body.n_idgen_venta+","+request.body.n_idgen_producto+","+request.body.n_cantidad+","+request.body.n_subtotal+","+request.body.b_pagado+",0,"+request.body.id_usercrea+",now()) returning *";
+        let scriptSQL = "insert into gen_detalle_venta (n_idgen_venta, n_idgen_producto, n_cantidad, n_subtotal, b_pagado,  n_borrado, n_id_usercrea, d_fechacrea)values("+request.body.n_idgen_venta+","+request.body.n_idgen_producto+","+request.body.n_cantidad+","+request.body.n_subtotal+","+request.body.b_pagado+",0,"+request.body.n_id_usercrea+",now()) returning *";
         console.log(scriptSQL)
         let queryUsuario = await pool.query(scriptSQL);
         if(queryUsuario.rowCount>0){
@@ -151,7 +151,7 @@ const insertardetalleventa = async (request, response) => {
         response.status(200).json({
             data:null,
                 flag: false,
-                mensaje: "Error al registrar el detalle de la venta"
+                mensaje: "Error al registrar el detalle de la venta " + error
             });
     }
 
@@ -214,5 +214,8 @@ module.exports = {
     getdato,
     insertarventa,
     insertardetalleventa,
+    actualizarpagodetalleventa,
+    actualizarfechaventa,
+    actualizarhoraventa
 }
 
