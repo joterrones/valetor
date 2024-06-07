@@ -117,9 +117,7 @@ const actualizarhoraventa = async (request, response) => {
 const actualizarhorainicio = async (request, response) => {
   try {
     let scriptSQL =
-      "update gen_venta set c_hora_inicio ='" +
-      request.body.c_hora_inicio +
-      "', n_id_usermodi = " +
+      "update gen_venta set d_fecha = now(), n_id_usermodi = " +
       request.body.n_idseg_vendedor +
       ",d_fechamodi = now() where n_idgen_venta = " +
       request.body.n_idgen_venta +
