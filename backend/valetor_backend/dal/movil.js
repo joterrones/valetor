@@ -80,30 +80,36 @@ const insertarventa = async (request, response) => {
   }
 };
 
-const actualizarhoraventa = async (request, response) => {
+const agregarhoras = async (request, response) => {
   try {
     let scriptSQL =
-      "update gen_venta set n_hora =" +request.body.n_hora +",d_fecha_fin = d_fecha + INTERVAL '"+request.body.n_hora+" hours', n_id_usermodi = " +request.body.n_idseg_vendedor +",d_fechamodi = now() where n_idgen_venta = " +request.body.n_idgen_venta +" returning *";
-    console.log(scriptSQL);
+    "insert into gen_hora_venta (n_idgen_venta, n_cantidad,n_precio, n_subtotal, b_pagado, n_borrado, n_id_usercrea, d_fechacrea)values(" +
+    request.body.n_idgen_venta +
+    "," +
+    request.body.n_cantidad + "," + request.body.n_precio +
+    ",0,0,0," +
+    request.body.n_idseg_vendedor +
+    ",now()) returning *";
+     console.log(scriptSQL);
     let queryUsuario = await pool.query(scriptSQL);
     if (queryUsuario.rowCount > 0) {
       response.status(200).json({
         data: queryUsuario.rows,
         flag: true,
-        mensaje: "Venta registrada correcta",
+        mensaje: "Hora registrada correcta",
       });
     } else {
       response.status(200).json({
         data: null,
         flag: false,
-        mensaje: "No se registró la venta",
+        mensaje: "No se registró la hora",
       });
     }
   } catch (error) {
     response.status(200).json({
       data: null,
       flag: false,
-      mensaje: "Error al registrar la venta",
+      mensaje: "Error al registrar la hora",
     });
   }
 };
@@ -247,11 +253,19 @@ const getdetalleventa = async (request, response) => {
   let detalleVenta = await pool.query(
     "select dv.n_idgen_detalle_venta,dv.n_idgen_venta,dv.n_idgen_producto,dv.n_cantidad,dv.n_subtotal,dv.b_pagado, p.n_precio, p.c_nombre c_nombreproducto " +
       "from gen_detalle_venta dv inner join gen_producto p on dv.n_idgen_producto = p.n_gen_producto where dv.n_idgen_venta = " +
-      request.query.n_idgen_venta +
-      " and dv.b_pagado = 0"
+      request.query.n_idgen_venta 
   );
   response.status(200).json(detalleVenta.rows);
 };
+
+const gethoraventa = async (request, response) => {
+    console.log("gethoraventa");
+    let detalleVenta = await pool.query(
+      "select * from v_hora where n_idgen_venta = " +
+        request.query.n_idgen_venta 
+    );
+    response.status(200).json(detalleVenta.rows);
+  };
 
 module.exports = {
   getusuario,
@@ -264,5 +278,6 @@ module.exports = {
   insertardetalleventa,
   actualizarpagodetalleventa,
   actualizarhorainicio,
-  actualizarhoraventa,
+  agregarhoras,
+  gethoraventa
 };

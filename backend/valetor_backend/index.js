@@ -44,7 +44,8 @@ app.get('/api/movil/getdetalleventa', dbMovil.getdetalleventa);
 app.post('/api/movil/insertarventa', dbMovil.insertarventa);
 app.post('/api/movil/insertardetalleventa', dbMovil.insertardetalleventa);
 app.post('/api/movil/actualizarhorainicio', dbMovil.actualizarhorainicio);
-app.post('/api/movil/actualizarhoraventa', dbMovil.actualizarhoraventa);
+app.post('/api/movil/agregarhoras', dbMovil.agregarhoras);
+app.get('/api/movil/gethoraventa', dbMovil.gethoraventa);
 
 
 
