@@ -37,35 +37,29 @@ const getusuario = async (request, response) => {
 
 const insertarventa = async (request, response) => {
   try {
-    let scriptSQL =
-      "insert into gen_venta (n_idseg_vendedor, n_idgen_equipo, b_pagado, n_borrado, n_id_usercrea, d_fechacrea)values(" +
-      request.body.n_idseg_vendedor +
-      "," +
-      request.body.n_idgen_equipo +
-      ",0,0," +
-      request.body.n_idseg_vendedor +
-      ",now()) returning *";
-    console.log(scriptSQL);
-    let queryUsuario = await pool.query(scriptSQL);
-    if (queryUsuario.rowCount > 0) {
-      response.status(200).json({
-        data: queryUsuario.rows,
-        flag: true,
-        mensaje: "Venta registrada correcta",
-      });
-    } else {
-      response.status(200).json({
-        data: null,
-        flag: false,
-        mensaje: "No se registró la venta",
-      });
+    console.log("select * from gen_venta where n_idgen_equipo ="+request.body.n_idgen_equipo)
+
+    let queryValidaSql = await pool.query("select * from v_venta where n_idgen_equipo ="+request.body.n_idgen_equipo);
+
+    if(queryValidaSql.rowCount==0){
+        let scriptSQL ="insert into gen_venta (n_idseg_vendedor, n_idgen_equipo, b_pagado, n_borrado, n_id_usercrea, d_fechacrea)values(" +
+        request.body.n_idseg_vendedor +"," +request.body.n_idgen_equipo +",0,0,"+request.body.n_idseg_vendedor +",now()) returning *";
+        console.log(scriptSQL);
+        await pool.query(scriptSQL);
+
+     
     }
+
+    let venta = await pool.query(
+        "select * from v_venta where n_idgen_equipo = " +
+          request.body.n_idgen_equipo 
+    );
+
+    response.status(200).json(venta.rows);
+
   } catch (error) {
-    response.status(200).json({
-      data: null,
-      flag: false,
-      mensaje: "Error al registrar la venta " + error,
-    });
+    console.log(error)
+    response.status(200).json(null);
   }
 };
 
@@ -229,7 +223,7 @@ const getproducto = async (request, response) => {
 const getventa = async (request, response) => {
   console.log("getventa");
   let venta = await pool.query(
-    "select * from v_detalleventa where n_idgen_equipo = " +
+    "select * from v_venta where n_idgen_equipo = " +
       request.query.n_idgen_equipo 
   );
   response.status(200).json(venta.rows);
