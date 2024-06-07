@@ -229,8 +229,8 @@ const getproducto = async (request, response) => {
 const getventa = async (request, response) => {
   console.log("getventa");
   let venta = await pool.query(
-    "select * from gen_venta where n_idgen_equipo = " +
-      request.query.n_idgen_equipo + " and b_pagado=0"
+    "select * from v_detalleventa where n_idgen_equipo = " +
+      request.query.n_idgen_equipo 
   );
   response.status(200).json(venta.rows);
 };
