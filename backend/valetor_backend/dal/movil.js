@@ -37,29 +37,46 @@ const getusuario = async (request, response) => {
 
 const insertarventa = async (request, response) => {
   try {
-    console.log("select * from gen_venta where n_idgen_equipo ="+request.body.n_idgen_equipo)
+    console.log(
+      "select * from gen_venta where n_idgen_equipo =" +
+        request.body.n_idgen_equipo
+    );
 
-    let queryValidaSql = await pool.query("select * from v_venta where n_idgen_equipo ="+request.body.n_idgen_equipo);
+    let queryValidaSql = await pool.query(
+      "select * from v_venta where n_idgen_equipo =" +
+        request.body.n_idgen_equipo
+    );
 
-    if(queryValidaSql.rowCount==0){
-        let scriptSQL ="insert into gen_venta (n_idseg_vendedor, n_idgen_equipo, b_pagado, n_borrado, n_id_usercrea, d_fechacrea)values(" +
-        request.body.n_idseg_vendedor +"," +request.body.n_idgen_equipo +",0,0,"+request.body.n_idseg_vendedor +",now()) returning *";
-        console.log(scriptSQL);
-        await pool.query(scriptSQL);
-
-     
+    if (queryValidaSql.rowCount == 0) {
+      let scriptSQL =
+        "insert into gen_venta (n_idseg_vendedor, n_idgen_equipo, b_pagado, n_borrado, n_id_usercrea, d_fechacrea)values(" +
+        request.body.n_idseg_vendedor +
+        "," +
+        request.body.n_idgen_equipo +
+        ",0,0," +
+        request.body.n_idseg_vendedor +
+        ",now()) returning *";
+      console.log(scriptSQL);
+      await pool.query(scriptSQL);
     }
 
     let venta = await pool.query(
-        "select * from v_venta where n_idgen_equipo = " +
-          request.body.n_idgen_equipo 
+      "select * from v_venta where n_idgen_equipo = " +
+        request.body.n_idgen_equipo
     );
 
-    response.status(200).json(venta.rows);
-
+    response.status(200).json({
+      data: venta.rows,
+      flag: true,
+      mensaje: "Venta registrada correcta",
+    });
   } catch (error) {
-    console.log(error)
-    response.status(200).json(null);
+    console.log(error);
+    response.status(200).json({
+      data: venta.rows,
+      flag: false,
+      mensaje: "error",
+    });
   }
 };
 
@@ -70,7 +87,9 @@ const actualizarhoraventa = async (request, response) => {
       request.body.n_hora +
       ", n_id_usermodi = " +
       request.body.n_idseg_vendedor +
-      ",d_fechamodi = now() where n_idgen_venta = "+request.body.n_idgen_venta+" returning *";
+      ",d_fechamodi = now() where n_idgen_venta = " +
+      request.body.n_idgen_venta +
+      " returning *";
     console.log(scriptSQL);
     let queryUsuario = await pool.query(scriptSQL);
     if (queryUsuario.rowCount > 0) {
@@ -102,7 +121,9 @@ const actualizarhorainicio = async (request, response) => {
       request.body.c_hora_inicio +
       "', n_id_usermodi = " +
       request.body.n_idseg_vendedor +
-      ",d_fechamodi = now() where n_idgen_venta = "+request.body.n_idgen_venta+" returning *";
+      ",d_fechamodi = now() where n_idgen_venta = " +
+      request.body.n_idgen_venta +
+      " returning *";
     console.log(scriptSQL);
     let queryUsuario = await pool.query(scriptSQL);
     if (queryUsuario.rowCount > 0) {
@@ -224,7 +245,7 @@ const getventa = async (request, response) => {
   console.log("getventa");
   let venta = await pool.query(
     "select * from v_venta where n_idgen_equipo = " +
-      request.query.n_idgen_equipo 
+      request.query.n_idgen_equipo
   );
   response.status(200).json(venta.rows);
 };
@@ -232,9 +253,10 @@ const getventa = async (request, response) => {
 const getdetalleventa = async (request, response) => {
   console.log("getdetalleventa");
   let detalleVenta = await pool.query(
-    "select dv.n_idgen_detalle_venta,dv.n_idgen_venta,dv.n_idgen_producto,dv.n_cantidad,dv.n_subtotal,dv.b_pagado, p.n_precio, p.c_nombre c_nombreproducto "+
-    "from gen_detalle_venta dv inner join gen_producto p on dv.n_idgen_producto = p.n_gen_producto where dv.n_idgen_venta = " +
-      request.query.n_idgen_venta + " and dv.b_pagado = 0"
+    "select dv.n_idgen_detalle_venta,dv.n_idgen_venta,dv.n_idgen_producto,dv.n_cantidad,dv.n_subtotal,dv.b_pagado, p.n_precio, p.c_nombre c_nombreproducto " +
+      "from gen_detalle_venta dv inner join gen_producto p on dv.n_idgen_producto = p.n_gen_producto where dv.n_idgen_venta = " +
+      request.query.n_idgen_venta +
+      " and dv.b_pagado = 0"
   );
   response.status(200).json(detalleVenta.rows);
 };
