@@ -146,6 +146,38 @@ const actualizarhorainicio = async (request, response) => {
   }
 };
 
+const actualizarpago = async (request, response) => {
+    try {
+      let scriptSQL =
+        "update gen_venta set b_pagado = 1, n_id_usermodi = " +
+        request.body.n_idseg_vendedor +
+        ",d_fechamodi = now() where n_idgen_venta = " +
+        request.body.n_idgen_venta +
+        " returning *";
+      console.log(scriptSQL);
+      let queryUsuario = await pool.query(scriptSQL);
+      if (queryUsuario.rowCount > 0) {
+        response.status(200).json({
+          data: queryUsuario.rows,
+          flag: true,
+          mensaje: "Pago actualizado correctamente",
+        });
+      } else {
+        response.status(200).json({
+          data: null,
+          flag: false,
+          mensaje: "No se actualizó el pago",
+        });
+      }
+    } catch (error) {
+      response.status(200).json({
+        data: null,
+        flag: false,
+        mensaje: "Error al actualizar el pago",
+      });
+    }
+  };
+
 const insertardetalleventa = async (request, response) => {
   try {
     let scriptSQL =
@@ -278,6 +310,7 @@ module.exports = {
   insertardetalleventa,
   actualizarpagodetalleventa,
   actualizarhorainicio,
+  actualizarpago,
   agregarhoras,
   gethoraventa
 };
