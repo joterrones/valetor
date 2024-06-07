@@ -283,8 +283,7 @@ const getventa = async (request, response) => {
 const getdetalleventa = async (request, response) => {
   console.log("getdetalleventa");
   let detalleVenta = await pool.query(
-    "select dv.n_idgen_detalle_venta,dv.n_idgen_venta,dv.n_idgen_producto,dv.n_cantidad,dv.n_subtotal,dv.b_pagado, p.n_precio, p.c_nombre c_nombreproducto " +
-      "from gen_detalle_venta dv inner join gen_producto p on dv.n_idgen_producto = p.n_gen_producto where dv.n_idgen_venta = " +
+    "select * from v_detalleventa where n_idgen_venta = " +
       request.query.n_idgen_venta 
   );
   response.status(200).json(detalleVenta.rows);
