@@ -220,7 +220,7 @@ const actualizarpagodetalleventa = async (request, response) => {
 
 const getequipo = async (request, response) => {
   console.log("getequipo");
-  let getequipo = await pool.query("select * from gen_equipo");
+  let getequipo = await pool.query("select * from v_equipo");
   response.status(200).json(getequipo.rows);
 };
 
