@@ -83,13 +83,7 @@ const insertarventa = async (request, response) => {
 const actualizarhoraventa = async (request, response) => {
   try {
     let scriptSQL =
-      "update gen_venta set n_hora =" +
-      request.body.n_hora +
-      ", n_id_usermodi = " +
-      request.body.n_idseg_vendedor +
-      ",d_fechamodi = now() where n_idgen_venta = " +
-      request.body.n_idgen_venta +
-      " returning *";
+      "update gen_venta set n_hora =" +request.body.n_hora +",d_fecha_fin = d_fecha + INTERVAL '"+request.body.n_hora+" hours', n_id_usermodi = " +request.body.n_idseg_vendedor +",d_fechamodi = now() where n_idgen_venta = " +request.body.n_idgen_venta +" returning *";
     console.log(scriptSQL);
     let queryUsuario = await pool.query(scriptSQL);
     if (queryUsuario.rowCount > 0) {
