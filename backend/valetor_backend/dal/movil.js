@@ -299,6 +299,62 @@ const gethoraventa = async (request, response) => {
     response.status(200).json(detalleVenta.rows);
   };
 
+  const anularHora = async (request, response) => {
+    try {
+      let scriptSQL =
+        "update gen_hora_venta set n_borrado = 1 where n_idgen_hora_venta = " + request.body.n_idgen_hora_venta + " returning *";
+      console.log(scriptSQL);
+      let queryUsuario = await pool.query(scriptSQL);
+      if (queryUsuario.rowCount > 0) {
+        response.status(200).json({
+          data: queryUsuario.rows,
+          flag: true,
+          mensaje: "la hora se anuló correctamente",
+        });
+      } else {
+        response.status(200).json({
+          data: null,
+          flag: false,
+          mensaje: "No se anuló la hora",
+        });
+      }
+    } catch (error) {
+      response.status(200).json({
+        data: null,
+        flag: false,
+        mensaje: "Error al anular la hora",
+      });
+    }
+  };
+
+  const anularproducto = async (request, response) => {
+    try {
+      let scriptSQL =
+        "update gen_detalle_venta set n_borrado = 1 where n_idgen_detalle_venta = " + request.body.n_idgen_detalle_venta + " returning *";
+      console.log(scriptSQL);
+      let queryUsuario = await pool.query(scriptSQL);
+      if (queryUsuario.rowCount > 0) {
+        response.status(200).json({
+          data: queryUsuario.rows,
+          flag: true,
+          mensaje: "la hora se anuló correctamente",
+        });
+      } else {
+        response.status(200).json({
+          data: null,
+          flag: false,
+          mensaje: "No se anuló la hora",
+        });
+      }
+    } catch (error) {
+      response.status(200).json({
+        data: null,
+        flag: false,
+        mensaje: "Error al anular la hora",
+      });
+    }
+  };
+
 module.exports = {
   getusuario,
   getequipo,
@@ -312,5 +368,7 @@ module.exports = {
   actualizarhorainicio,
   actualizarpago,
   agregarhoras,
-  gethoraventa
+  gethoraventa,
+  anularHora,
+  anularproducto
 };

@@ -47,7 +47,8 @@ app.post('/api/movil/actualizarhorainicio', dbMovil.actualizarhorainicio);
 app.post('/api/movil/actualizarpago', dbMovil.actualizarpago);
 app.post('/api/movil/agregarhoras', dbMovil.agregarhoras);
 app.get('/api/movil/gethoraventa', dbMovil.gethoraventa);
-
+app.post('/api/movil/anularHora', dbMovil.anularHora);
+app.post('/api/movil/anularproducto', dbMovil.anularproducto);
 
 
 server.listen(port, function () {
