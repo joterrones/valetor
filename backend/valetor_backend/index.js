@@ -43,6 +43,10 @@ app.get('/api/movil/getventa', dbMovil.getventa);
 app.get('/api/movil/getdetalleventa', dbMovil.getdetalleventa);
 app.post('/api/movil/insertarventa', dbMovil.insertarventa);
 app.post('/api/movil/insertardetalleventa', dbMovil.insertardetalleventa);
+app.post('/api/movil/actualizarhorainicio', dbMovil.actualizarhorainicio);
+app.post('/api/movil/actualizarhoraventa', dbMovil.actualizarhoraventa);
+
+
 
 server.listen(port, function () {
   console.log('\n')

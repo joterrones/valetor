@@ -76,7 +76,7 @@ const actualizarhoraventa = async (request, response) => {
       request.body.n_hora +
       ", n_id_usermodi = " +
       request.body.n_idseg_vendedor +
-      ",d_fechamodi = now()) returning *";
+      ",d_fechamodi = now() where n_idgen_venta = "+request.body.n_idgen_venta+" returning *";
     console.log(scriptSQL);
     let queryUsuario = await pool.query(scriptSQL);
     if (queryUsuario.rowCount > 0) {
@@ -101,14 +101,14 @@ const actualizarhoraventa = async (request, response) => {
   }
 };
 
-const actualizarfechaventa = async (request, response) => {
+const actualizarhorainicio = async (request, response) => {
   try {
     let scriptSQL =
-      "update gen_venta set d_fecha =" +
-      request.body.d_fecha +
-      ", n_id_usermodi = " +
+      "update gen_venta set c_hora_inicio ='" +
+      request.body.c_hora_inicio +
+      "', n_id_usermodi = " +
       request.body.n_idseg_vendedor +
-      ",d_fechamodi = now()) returning *";
+      ",d_fechamodi = now() where n_idgen_venta = "+request.body.n_idgen_venta+" returning *";
     console.log(scriptSQL);
     let queryUsuario = await pool.query(scriptSQL);
     if (queryUsuario.rowCount > 0) {
@@ -255,6 +255,6 @@ module.exports = {
   insertarventa,
   insertardetalleventa,
   actualizarpagodetalleventa,
-  actualizarfechaventa,
+  actualizarhorainicio,
   actualizarhoraventa,
 };
