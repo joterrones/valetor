@@ -83,14 +83,16 @@ const insertarventa = async (request, response) => {
 const agregarhoras = async (request, response) => {
   try {
     let scriptSQL =
-    "insert into gen_hora_venta (n_idgen_venta, n_cantidad,n_precio, n_subtotal, b_pagado, n_borrado, n_id_usercrea, d_fechacrea)values(" +
-    request.body.n_idgen_venta +
-    "," +
-    request.body.n_cantidad + "," + request.body.n_precio +
-    ",0,0,0," +
-    request.body.n_idseg_vendedor +
-    ",now()) returning *";
-     console.log(scriptSQL);
+      "insert into gen_hora_venta (n_idgen_venta, n_cantidad,n_precio, n_subtotal, b_pagado, n_borrado, n_id_usercrea, d_fechacrea)values(" +
+      request.body.n_idgen_venta +
+      "," +
+      request.body.n_cantidad +
+      "," +
+      request.body.n_precio +
+      ",0,0,0," +
+      request.body.n_idseg_vendedor +
+      ",now()) returning *";
+    console.log(scriptSQL);
     let queryUsuario = await pool.query(scriptSQL);
     if (queryUsuario.rowCount > 0) {
       response.status(200).json({
@@ -147,36 +149,36 @@ const actualizarhorainicio = async (request, response) => {
 };
 
 const actualizarpago = async (request, response) => {
-    try {
-      let scriptSQL =
-        "update gen_venta set b_pagado = 1, n_id_usermodi = " +
-        request.body.n_idseg_vendedor +
-        ",d_fechamodi = now() where n_idgen_venta = " +
-        request.body.n_idgen_venta +
-        " returning *";
-      console.log(scriptSQL);
-      let queryUsuario = await pool.query(scriptSQL);
-      if (queryUsuario.rowCount > 0) {
-        response.status(200).json({
-          data: queryUsuario.rows,
-          flag: true,
-          mensaje: "Pago actualizado correctamente",
-        });
-      } else {
-        response.status(200).json({
-          data: null,
-          flag: false,
-          mensaje: "No se actualizó el pago",
-        });
-      }
-    } catch (error) {
+  try {
+    let scriptSQL =
+      "update gen_venta set b_pagado = 1, n_id_usermodi = " +
+      request.body.n_idseg_vendedor +
+      ",d_fechamodi = now() where n_idgen_venta = " +
+      request.body.n_idgen_venta +
+      " returning *";
+    console.log(scriptSQL);
+    let queryUsuario = await pool.query(scriptSQL);
+    if (queryUsuario.rowCount > 0) {
+      response.status(200).json({
+        data: queryUsuario.rows,
+        flag: true,
+        mensaje: "Pago actualizado correctamente",
+      });
+    } else {
       response.status(200).json({
         data: null,
         flag: false,
-        mensaje: "Error al actualizar el pago",
+        mensaje: "No se actualizó el pago",
       });
     }
-  };
+  } catch (error) {
+    response.status(200).json({
+      data: null,
+      flag: false,
+      mensaje: "Error al actualizar el pago",
+    });
+  }
+};
 
 const insertardetalleventa = async (request, response) => {
   try {
@@ -272,19 +274,26 @@ const getproducto = async (request, response) => {
 };
 
 const getventahistorica = async (request, response) => {
-  console.log("getproducto");
-  let producto = await pool.query(
-    "select * from v_ventahistorico");
-  response.status(200).json(producto.rows);
+  try {
+    console.log("getproducto");
+    let producto = await pool.query("select * from v_ventahistorico");
+    response.status(200).json(producto.rows);
+  } catch (error) {
+    response.status(200).json(error);
+  }
 };
 
 const getventahistoricafecha = async (request, response) => {
-  console.log("getproducto");
-  let ventas = await pool.query(
-    "select * from v_ventahistorico where d_fecha = " + request.query.d_fecha);
-  response.status(200).json(ventas.rows);
+  try {
+    console.log("getproducto");
+    let ventas = await pool.query(
+      "select * from v_ventahistorico where d_fecha = " + request.query.d_fecha
+    );
+    response.status(200).json(ventas.rows);
+  } catch (error) {
+    response.status(200).json(error);
+  }
 };
-
 
 const getventa = async (request, response) => {
   console.log("getventa");
@@ -299,75 +308,78 @@ const getdetalleventa = async (request, response) => {
   console.log("getdetalleventa");
   let detalleVenta = await pool.query(
     "select * from v_detalleventa where n_idgen_venta = " +
-      request.query.n_idgen_venta 
+      request.query.n_idgen_venta
   );
   response.status(200).json(detalleVenta.rows);
 };
 
 const gethoraventa = async (request, response) => {
-    console.log("gethoraventa");
-    let detalleVenta = await pool.query(
-      "select * from v_hora where n_idgen_venta = " +
-        request.query.n_idgen_venta 
-    );
-    response.status(200).json(detalleVenta.rows);
-  };
+  console.log("gethoraventa");
+  let detalleVenta = await pool.query(
+    "select * from v_hora where n_idgen_venta = " + request.query.n_idgen_venta
+  );
+  response.status(200).json(detalleVenta.rows);
+};
 
-  const anularHora = async (request, response) => {
-    try {
-      let scriptSQL =
-        "update gen_hora_venta set n_borrado = 1 where n_idgen_hora_venta = " + request.body.n_idgen_hora_venta + " returning *";
-      console.log(scriptSQL);
-      let queryUsuario = await pool.query(scriptSQL);
-      if (queryUsuario.rowCount > 0) {
-        response.status(200).json({
-          data: queryUsuario.rows,
-          flag: true,
-          mensaje: "la hora se anuló correctamente",
-        });
-      } else {
-        response.status(200).json({
-          data: null,
-          flag: false,
-          mensaje: "No se anuló la hora",
-        });
-      }
-    } catch (error) {
+const anularHora = async (request, response) => {
+  try {
+    let scriptSQL =
+      "update gen_hora_venta set n_borrado = 1 where n_idgen_hora_venta = " +
+      request.body.n_idgen_hora_venta +
+      " returning *";
+    console.log(scriptSQL);
+    let queryUsuario = await pool.query(scriptSQL);
+    if (queryUsuario.rowCount > 0) {
+      response.status(200).json({
+        data: queryUsuario.rows,
+        flag: true,
+        mensaje: "la hora se anuló correctamente",
+      });
+    } else {
       response.status(200).json({
         data: null,
         flag: false,
-        mensaje: "Error al anular la hora",
+        mensaje: "No se anuló la hora",
       });
     }
-  };
+  } catch (error) {
+    response.status(200).json({
+      data: null,
+      flag: false,
+      mensaje: "Error al anular la hora",
+    });
+  }
+};
 
-  const anularproducto = async (request, response) => {
-    try {
-      let scriptSQL =
-        "update gen_detalle_venta set n_borrado = 1 where n_idgen_detalle_venta = " + request.body.n_idgen_detalle_venta + " returning *";
-      console.log(scriptSQL);
-      let queryUsuario = await pool.query(scriptSQL);
-      if (queryUsuario.rowCount > 0) {
-        response.status(200).json({
-          data: queryUsuario.rows,
-          flag: true,
-          mensaje: "la hora se anuló correctamente",
-        });
-      } else {
-        response.status(200).json({
-          data: null,
-          flag: false,
-          mensaje: "No se anuló la hora",
-        });
-      }
-    } catch (error) {
+const anularproducto = async (request, response) => {
+  try {
+    let scriptSQL =
+      "update gen_detalle_venta set n_borrado = 1 where n_idgen_detalle_venta = " +
+      request.body.n_idgen_detalle_venta +
+      " returning *";
+    console.log(scriptSQL);
+    let queryUsuario = await pool.query(scriptSQL);
+    if (queryUsuario.rowCount > 0) {
+      response.status(200).json({
+        data: queryUsuario.rows,
+        flag: true,
+        mensaje: "la hora se anuló correctamente",
+      });
+    } else {
       response.status(200).json({
         data: null,
         flag: false,
-        mensaje: "Error al anular la hora",
+        mensaje: "No se anuló la hora",
       });
     }
-  };
+  } catch (error) {
+    response.status(200).json({
+      data: null,
+      flag: false,
+      mensaje: "Error al anular la hora",
+    });
+  }
+};
 
 module.exports = {
   getusuario,
@@ -386,5 +398,5 @@ module.exports = {
   anularHora,
   anularproducto,
   getventahistorica,
-  getventahistoricafecha
+  getventahistoricafecha,
 };
