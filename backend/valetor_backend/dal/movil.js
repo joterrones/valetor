@@ -287,7 +287,7 @@ const getventahistoricafecha = async (request, response) => {
   try {
     console.log("getproducto");
     let ventas = await pool.query(
-      "select * from v_ventahistorico where d_fecha = '" + request.query.d_fecha + "'"
+      "select * from v_ventahistorico where fecha = '" + request.query.d_fecha + "'"
     );
     response.status(200).json(ventas.rows);
   } catch (error) {
