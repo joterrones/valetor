@@ -271,6 +271,21 @@ const getproducto = async (request, response) => {
   response.status(200).json(producto.rows);
 };
 
+const getventahistorica = async (request, response) => {
+  console.log("getproducto");
+  let producto = await pool.query(
+    "select * from v_ventahistorico");
+  response.status(200).json(producto.rows);
+};
+
+const getventahistoricafecha = async (request, response) => {
+  console.log("getproducto");
+  let ventas = await pool.query(
+    "select * from v_ventahistorico where d_fecha = " + request.query.d_fecha);
+  response.status(200).json(ventas.rows);
+};
+
+
 const getventa = async (request, response) => {
   console.log("getventa");
   let venta = await pool.query(
@@ -369,5 +384,7 @@ module.exports = {
   agregarhoras,
   gethoraventa,
   anularHora,
-  anularproducto
+  anularproducto,
+  getventahistorica,
+  getventahistoricafecha
 };
